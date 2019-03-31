@@ -2,80 +2,138 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Friends</title>
+    <meta charset="utf-8">
+    <title>Artist Giphy</title>
+    <style type="text/css">
+        button,
+        div,
+        form,
+        input {
+            margin: 10px;
+        }
+    </style>
 </head>
 
 <body>
+
     <div class="container">
-        <h1>Friends</h1>
+        <h1>Artist Search</h1>
+
+        <!-- Movies will get dumped here -->
         <div id="buttons-view"></div>
 
-        <form id="name-form">
-            <label for="name-input">Add a Friend's character</label>
-            <input type="text" id="name-input"><br>
+        <form id="movie-form">
+            <label for="movie-input">Add New Artist</label>
+            <input type="text" id="artist-input"><br>
 
-            <!-- Button triggers new name to be added -->
-            <input id="add-name" type="submit" value="Add a Friend's character">
+            <!-- Button triggers new movie to be added -->
+            <input id="add-artist" type="submit" value="Submit">
         </form>
+        <div id="gifs-appear-here"></div>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script type="text/javascript">
-            //Create an array of Friends names
-            var friends = ["Rachel", "Monica", "Ross", "Joey", "Chandler", "Phoebe"];
-            //Function for capturing the name 
-            function alertFriendsName() {
-                var friendsName = $(this).attr("data-name");
+            // Initial array of movies
+            var artists = ["Bruno Mars", "Taylor Swift", "Ed Sheeran", "Jason Derulo"];
 
-                alert(friendsName);
-            }
             // Function for displaying movie data
-            function renderButtons() {
-                // Deleting the friends prior to adding new friends
+            var renderButtons = () => {
+
+                // Deleting the movie buttons prior to adding new movie buttons
                 // (this is necessary otherwise we will have repeat buttons)
-                $("#buttons-view").empty();
+                document.querySelector("#buttons-view").innerHTML = "";
+
                 // Looping through the array of movies
-                for (var i = 0; i < friends.length; i++) {
-                    // Then dynamicaly generating buttons for each friend in the array
-                    // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
-                    var a = $("<button>");
-                    // Adding a class of friends to our button
-                    a.addClass("friends");
-                    // Adding a data-attribute
-                    a.attr("data-name", friends[i]);
-                    // Providing the initial button text
-                    a.text(friends[i]);
+                for (let artist of artists) {
+
+                    // Then dynamicaly generating buttons for each movie in the array.
+                    var a = document.createElement("button");
+                    // Adding a class
+                    a.classList.add("artist");
+                    // Adding a data-attribute with a value of the movie at index i
+                    a.setAttribute("data-name", artist);
+                    // Providing the button's text with a value of the movie at index i
+                    a.innerText = artist;
                     // Adding the button to the HTML
-                    $("#buttons-view").append(a);
+                    document.querySelector("#buttons-view").appendChild(a);
                 }
+
             }
 
             // This function handles events where one button is clicked
-            $("#add-name").on("click", function (event) {
-                // Preventing the buttons default behavior when clicked (which is submitting a form)
+            document.querySelector("#add-artist").addEventListener("click", (event) => {
+                // event.preventDefault() prevents the form from trying to submit itself.
+                // We're using a form so that the user can hit enter instead of clicking the button if they want
                 event.preventDefault();
-                // This line grabs the input from the textbox
-                var friend = $("#name-input").val().trim();
 
-                // Adding the movie from the textbox to our array
-                friends.push(friend);
+                // This line will grab the text from the input box
+                var artist = document.querySelector("#artist-input").value.trim();
+                // The movie from the textbox is then added to our array
+                artists.push(artist);
 
-                // Calling renderButtons which handles the processing of our movie array
+                // calling renderButtons which handles the processing of our movie array
                 renderButtons();
-
             });
 
-            // Function for displaying the movie info
-            // We're adding a click event listener to all elements with the class "movie"
-            // We're adding the event listener to the document because it will work for dynamically generated elements
-            // $(".movies").on("click") will only add listeners to elements that are on the page at that time
-            $(document).on("click", ".friend", alertFriendsName);
-
-            // Calling the renderButtons function to display the intial buttons
+            // Calling the renderButtons function at least once to display the initial list of movies
             renderButtons();
 
+            document.querySelector(".container").addEventListener("click", function (event) {
+
+                if (event.target.tagName === "button".toUpperCase()) {
+
+                    // In this case, the "this" keyword refers to the button that was clicked
+                    var person = event.target.dataset.person;
+
+                    // Constructing a URL to search Giphy for the name of the person who said the quote
+                    var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
+
+                    // Performing our AJAX GET request
+                    fetch(queryURL, {
+                        method: "GET"
+                    })
+                        // After the data comes back from the API
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (response) {
+                            // Storing an array of results in the results variable
+                            var results = response.data;
+
+                            // Looping over every result item
+                            for (let item of results) {
+
+                                // Only taking action if the photo has an appropriate rating
+                                if (item.rating !== "r" && item.rating !== "pg-13") {
+                                    // Creating a div for the gif
+                                    var gifDiv = document.createElement("div");
+
+                                    // Storing the result item's rating
+                                    var rating = item.rating;
+
+                                    // Creating a paragraph tag with the result item's rating
+                                    var p = document.createElement("p")
+                                    p.innerText = `Rating: ${rating}`;
+
+                                    // Creating an image tag
+                                    var personImage = document.createElement("img");
+
+                                    // Giving the image tag an src attribute of a proprty pulled off the
+                                    // result item
+                                    personImage.setAttribute("src", item.images.fixed_height.url);
+
+                                    // Appending the paragraph and personImage we created to the "gifDiv" div we created
+                                    gifDiv.appendChild(p);
+                                    gifDiv.appendChild(personImage);
+
+                                    // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+                                    let gifsContainer = document.querySelector("#gifs-appear-here");
+                                    gifsContainer.insertBefore(gifDiv, gifsContainer.firstChild);
+                                }
+                            }
+                        });
+                }
+            });
+     
 
 
 

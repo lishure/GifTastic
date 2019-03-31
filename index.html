@@ -1,31 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>DisneyLand</title>
+    <title>Friends</title>
 </head>
+
 <body>
     <div class="container">
-        <button data-person="Micky Mouse">Micky Mouse</button>
-        <button data-person="Minnie Mouse">Minnie Mouse</button>
-        <button data-person="Goofy">Goofy</button>
-        <button data-person="Cinderella">Cinderella</button>
-        <button data-person="Snow White">Snow White</button>
-        <button data-person="Lion King">Lion King</button>
-        <button data-person="Princess Jasmine">Princess Jasmine</button>
-        <button data-person="Ariel">Ariel-The Little Mermaid</button>
-        <button data-person="Belle">Belle-Beauty and the Beast</button>
-        <button data-person="Pooh Bear">Pooh Bear</button>
-        <button data-person="Queen Elsa">Queen Elsa</button>
-        <button data-person="Mulan">Mulan</button>
-    </div>
+        <h1>Friends</h1>
+        <div id="buttons-view"></div>
 
-    <script type="text/javascript">
-    //Choose Theme- Disney
+        <form id="name-form">
+            <label for="name-input">Add a Friend's character</label>
+            <input type="text" id="name-input"><br>
+
+            <!-- Button triggers new name to be added -->
+            <input id="add-name" type="submit" value="Add a Friend's character">
+        </form>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
+            //Create an array of Friends names
+            var friends = ["Rachel", "Monica", "Ross", "Joey", "Chandler", "Phoebe"];
+            //Function for capturing the name 
+            function alertFriendsName() {
+                var friendsName = $(this).attr("data-name");
+
+                alert(friendsName);
+            }
+            // Function for displaying movie data
+            function renderButtons() {
+                // Deleting the friends prior to adding new friends
+                // (this is necessary otherwise we will have repeat buttons)
+                $("#buttons-view").empty();
+                // Looping through the array of movies
+                for (var i = 0; i < friends.length; i++) {
+                    // Then dynamicaly generating buttons for each friend in the array
+                    // This code $("<button>") is all jQuery needs to create the start and end tag. (<button></button>)
+                    var a = $("<button>");
+                    // Adding a class of friends to our button
+                    a.addClass("friends");
+                    // Adding a data-attribute
+                    a.attr("data-name", friends[i]);
+                    // Providing the initial button text
+                    a.text(friends[i]);
+                    // Adding the button to the HTML
+                    $("#buttons-view").append(a);
+                }
+            }
+
+            // This function handles events where one button is clicked
+            $("#add-name").on("click", function (event) {
+                // Preventing the buttons default behavior when clicked (which is submitting a form)
+                event.preventDefault();
+                // This line grabs the input from the textbox
+                var friend = $("#name-input").val().trim();
+
+                // Adding the movie from the textbox to our array
+                friends.push(friend);
+
+                // Calling renderButtons which handles the processing of our movie array
+                renderButtons();
+
+            });
+
+            // Function for displaying the movie info
+            // We're adding a click event listener to all elements with the class "movie"
+            // We're adding the event listener to the document because it will work for dynamically generated elements
+            // $(".movies").on("click") will only add listeners to elements that are on the page at that time
+            $(document).on("click", ".friend", alertFriendsName);
+
+            // Calling the renderButtons function to display the intial buttons
+            renderButtons();
+
+
+
+
     //create an array of disney characters
-    
+
     //Create a loop to make the array into buttons
     //Create on click function for button
 
@@ -52,8 +107,10 @@
 // Only once you get images displaying with button presses should you move on to the next step.
 
 // Add a form to your page takes the value from a user input box and adds it into your topics array. Then make a function call that takes each topic in the array remakes the buttons on the page.
-    
-    
-    </script>
+
+
+        </script>
+    </div>
 </body>
+
 </html>

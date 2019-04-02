@@ -22,8 +22,8 @@
         <!-- Movies will get dumped here -->
         <div id="buttons-view"></div>
 
-        <form id="movie-form">
-            <label for="movie-input">Add New Artist</label>
+        <form id="artists-form">
+            <label for="artists-input">Add New Artist</label>
             <input type="text" id="artist-input"><br>
 
             <!-- Button triggers new movie to be added -->
@@ -77,63 +77,73 @@
             // Calling the renderButtons function at least once to display the initial list of movies
             renderButtons();
 
-            document.querySelector(".container").addEventListener("click", function (event) {
+            // function displayGifs() {
+            //     var lady = $(this).attr("data-name");
+            //     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + lady + "&api_key=dc6zaTOxFJmzC&limit=8";
 
-                if (event.target.tagName === "button".toUpperCase()) {
+            //     $.ajax({
+            //         url: queryURL,
+            //         method: 'GET'
+            //     })
 
-                    // In this case, the "this" keyword refers to the button that was clicked
-                    var person = event.target.dataset.person;
+                document.querySelector(".container").addEventListener("click", function (event) {
 
-                    // Constructing a URL to search Giphy for the name of the person who said the quote
-                    var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
+                    if (event.target.tagName === "button".toUpperCase()) {
 
-                    // Performing our AJAX GET request
-                    fetch(queryURL, {
-                        method: "GET"
-                    })
-                        // After the data comes back from the API
-                        .then(function (response) {
-                            return response.json();
+                        // In this case, the "this" keyword refers to the button that was clicked
+                        var person = event.target.innerText;
+                        console.log(person)
+
+                        // Constructing a URL to search Giphy for the name of the person who said the quote
+                        var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
+
+                        // Performing our AJAX GET request
+                        fetch(queryURL, {
+                            method: "GET"
                         })
-                        .then(function (response) {
-                            // Storing an array of results in the results variable
-                            var results = response.data;
+                            // After the data comes back from the API
+                            .then(function (response) {
+                                return response.json();
+                            })
+                            .then(function (response) {
+                                // Storing an array of results in the results variable
+                                var results = response.data;
 
-                            // Looping over every result item
-                            for (let item of results) {
+                                // Looping over every result item
+                                for (let item of results) {
 
-                                // Only taking action if the photo has an appropriate rating
-                                if (item.rating !== "r" && item.rating !== "pg-13") {
-                                    // Creating a div for the gif
-                                    var gifDiv = document.createElement("div");
+                                    // Only taking action if the photo has an appropriate rating
+                                    if (item.rating !== "r" && item.rating !== "pg-13") {
+                                        // Creating a div for the gif
+                                        var gifDiv = document.createElement("div");
 
-                                    // Storing the result item's rating
-                                    var rating = item.rating;
+                                        // Storing the result item's rating
+                                        var rating = item.rating;
 
-                                    // Creating a paragraph tag with the result item's rating
-                                    var p = document.createElement("p")
-                                    p.innerText = `Rating: ${rating}`;
+                                        // Creating a paragraph tag with the result item's rating
+                                        var p = document.createElement("p")
+                                        p.innerText = `Rating: ${rating}`;
 
-                                    // Creating an image tag
-                                    var personImage = document.createElement("img");
+                                        // Creating an image tag
+                                        var personImage = document.createElement("img");
 
-                                    // Giving the image tag an src attribute of a proprty pulled off the
-                                    // result item
-                                    personImage.setAttribute("src", item.images.fixed_height.url);
+                                        // Giving the image tag an src attribute of a proprty pulled off the
+                                        // result item
+                                        personImage.setAttribute("src", item.images.fixed_height.url);
 
-                                    // Appending the paragraph and personImage we created to the "gifDiv" div we created
-                                    gifDiv.appendChild(p);
-                                    gifDiv.appendChild(personImage);
+                                        // Appending the paragraph and personImage we created to the "gifDiv" div we created
+                                        gifDiv.appendChild(p);
+                                        gifDiv.appendChild(personImage);
 
-                                    // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-                                    let gifsContainer = document.querySelector("#gifs-appear-here");
-                                    gifsContainer.insertBefore(gifDiv, gifsContainer.firstChild);
+                                        // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+                                        let gifsContainer = document.querySelector("#gifs-appear-here");
+                                        gifsContainer.insertBefore(gifDiv, gifsContainer.firstChild);
+                                    }
                                 }
-                            }
-                        });
-                }
-            });
-     
+                            });
+                    }
+                });
+
 
 
 

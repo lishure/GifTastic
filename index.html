@@ -33,7 +33,7 @@
 
         <script type="text/javascript">
             // Initial array of movies
-            var artists = ["Bruno Mars", "Taylor Swift", "Ed Sheeran", "Jason Derulo"];
+            var artists = ["Bruno Mars", "Taylor Swift", "Ed Sheeran", "Jason Derulo", "Charlie Puth", "BTS", "The Weeknd"];
 
             // Function for displaying movie data
             var renderButtons = () => {
@@ -86,63 +86,97 @@
             //         method: 'GET'
             //     })
 
-                document.querySelector(".container").addEventListener("click", function (event) {
+            document.querySelector(".container").addEventListener("click", function (event) {
+                if (event.target.tagName === "button".toUpperCase()) {
 
-                    if (event.target.tagName === "button".toUpperCase()) {
+                    // In this case, the "this" keyword refers to the button that was clicked
+                    var person = event.target.innerText;
+                    console.log(person)
 
-                        // In this case, the "this" keyword refers to the button that was clicked
-                        var person = event.target.innerText;
-                        console.log(person)
-
-                        // Constructing a URL to search Giphy for the name of the person who said the quote
-                        var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
-
-                        // Performing our AJAX GET request
-                        fetch(queryURL, {
-                            method: "GET"
+                    // Constructing a URL to search Giphy for the name of the person who said the quote
+                    var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
+                    console.log(queryURL)
+                    // Performing our AJAX GET request
+                    fetch(queryURL, {
+                        method: "GET"
+                    })
+                        // After the data comes back from the API
+                        .then(function (response) {
+                            return response.json();
                         })
-                            // After the data comes back from the API
-                            .then(function (response) {
-                                return response.json();
-                            })
-                            .then(function (response) {
-                                // Storing an array of results in the results variable
-                                var results = response.data;
+                        .then(function (response) {
+                            // Storing an array of results in the results variable
+                            var results = response.data;
 
-                                // Looping over every result item
-                                for (let item of results) {
+                            // Looping over every result item
+                            for (let item of results) {
 
-                                    // Only taking action if the photo has an appropriate rating
-                                    if (item.rating !== "r" && item.rating !== "pg-13") {
-                                        // Creating a div for the gif
-                                        var gifDiv = document.createElement("div");
+                                // Only taking action if the photo has an appropriate rating
+                                if (item.rating !== "r" && item.rating !== "pg-13") {
+                                    // Creating a div for the gif
+                                    var gifDiv = document.createElement("div");
 
-                                        // Storing the result item's rating
-                                        var rating = item.rating;
+                                    // Storing the result item's rating
+                                    var rating = item.rating;
 
-                                        // Creating a paragraph tag with the result item's rating
-                                        var p = document.createElement("p")
-                                        p.innerText = `Rating: ${rating}`;
+                                    // Creating a paragraph tag with the result item's rating
+                                    var p = document.createElement("p")
+                                    p.innerText = `Rating: ${rating}`;
 
-                                        // Creating an image tag
-                                        var personImage = document.createElement("img");
+                                    // Creating an image tag
+                                    var personImage = document.createElement("img");
 
-                                        // Giving the image tag an src attribute of a proprty pulled off the
-                                        // result item
-                                        personImage.setAttribute("src", item.images.fixed_height.url);
+                                    // Giving the image tag an src attribute of a proprty pulled off the
+                                    // result item
+                                    personImage.setAttribute("src", item.images.fixed_height_still.url);
+                                    personImage.setAttribute("data-still", item.images.fixed_height_still.url);
+                                    personImage.setAttribute("data-animate", item.images.fixed_height.url);
+                                    personImage.classList.add("image");
 
-                                        // Appending the paragraph and personImage we created to the "gifDiv" div we created
-                                        gifDiv.appendChild(p);
-                                        gifDiv.appendChild(personImage);
+                                    // Appending the paragraph and personImage we created to the "gifDiv" div we created
+                                    gifDiv.appendChild(p);
+                                    gifDiv.appendChild(personImage);
 
-                                        // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
-                                        let gifsContainer = document.querySelector("#gifs-appear-here");
-                                        gifsContainer.insertBefore(gifDiv, gifsContainer.firstChild);
-                                    }
+                                    // Prepending the gifDiv to the "#gifs-appear-here" div in the HTML
+                                    let gifsContainer = document.querySelector("#gifs-appear-here");
+                                    gifsContainer.insertBefore(gifDiv, gifsContainer.firstChild);
+                                    // gifsContainer.setAttribute("data-still", data.images.fixed_height_small_still.url);
                                 }
-                            });
-                    }
-                });
+                            }
+                        });
+                }
+            });
+            renderButtons();
+
+            document.querySelector(".container").addEventListener("click", function (event) {
+            let currentImg = event.target
+            var state = currentImg.dataset.state
+            if (state === "still") {
+                currentImg.setAttribute("src", currentImg.dataset.animate)
+                currentImg.setAttribute("data-state", "animate")
+            } else {
+                currentImg.setAttribute("src", currentImg.dataset.still)
+                currentImg.setAttribute("data-state", "still")
+            }
+            })
+
+            // document.querySelector(".container").addEventListener("click", function (event) {
+            //         if (event.target.tagName === 'img'.toUpperCase()) {
+            //             let currentImg = event.target
+            //             var state = currentImg.dataset.state
+            //             // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+            //             // Then, set the image's data-state to animate
+            //             // Else set src to the data-still value
+            //             if (state === "still") {
+            //                 currentImg.setAttribute("src", currentImg.dataset.animate)
+            //                 currentImg.setAttribute("data-state", "animate")
+            //             } else {
+            //                 currentImg.setAttribute('src', currentImg.dataset.still)
+            //                 currentImg.setAttribute("data-state", "still")
+            //             }
+            //         }
+            //     });
+
 
 
 

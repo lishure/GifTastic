@@ -1,0 +1,27 @@
+body {
+    background: URL(images/bruno.jpg);
+    background-size: contain;
+
+}
+
+button,
+        div,
+        form,
+        input {
+            margin: 10px;
+        }
+
+
+h1 {
+    color: black;
+    size: 46px;
+    font-family: cursive;
+    text-align: center;
+}
+
+h2 {
+    color: black;
+    size: 16px;
+}
+
+

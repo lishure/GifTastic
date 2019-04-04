@@ -3,42 +3,39 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Artist Giphy</title>
-    <style type="text/css">
-        button,
-        div,
-        form,
-        input {
-            margin: 10px;
-        }
-    </style>
+    <title><h1>Artist Giphy</h1></title>
+    <link rel="icon" type="image/png" href="images/images.jpg">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
+ 
 
     <div class="container">
         <h1>Artist Search</h1>
 
-        <!-- Movies will get dumped here -->
+        <!-- artists will get dumped here -->
         <div id="buttons-view"></div>
 
         <form id="artists-form">
-            <label for="artists-input">Add New Artist</label>
+            <label for="artists-input"><h2>Add New Artist</h2></label>
             <input type="text" id="artist-input"><br>
 
-            <!-- Button triggers new movie to be added -->
+            <!-- Button triggers new artist to be added -->
             <input id="add-artist" type="submit" value="Submit">
         </form>
         <div id="gifs-appear-here"></div>
+    
 
         <script type="text/javascript">
             // Initial array of movies
             var artists = ["Bruno Mars", "Taylor Swift", "Ed Sheeran", "Jason Derulo", "Charlie Puth", "BTS", "The Weeknd"];
 
-            // Function for displaying movie data
+            // Function for displaying artist data
             var renderButtons = () => {
 
-                // Deleting the movie buttons prior to adding new movie buttons
+                // Deleting the movie buttons prior to adding new artists buttons
                 // (this is necessary otherwise we will have repeat buttons)
                 document.querySelector("#buttons-view").innerHTML = "";
 

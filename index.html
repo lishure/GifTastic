@@ -105,6 +105,8 @@
                             // Storing an array of results in the results variable
                             var results = response.data;
 
+                            //This clears the gifs on click before new gifs appear
+                            document.getElementById("gifs-appear-here").innerHTML = "";
                             // Looping over every result item
                             for (let item of results) {
 

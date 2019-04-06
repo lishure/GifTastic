@@ -3,52 +3,54 @@
 
 <head>
     <meta charset="utf-8">
-    <title><h1>Artist Giphy</h1></title>
+    <title>
+        <h1>Artist Giphy</h1>
+    </title>
     <link rel="icon" type="image/png" href="images/images.jpg">
 
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
- 
 
     <div class="container">
         <h1>Artist Search</h1>
 
-        <!-- artists will get dumped here -->
         <div id="buttons-view"></div>
 
         <form id="artists-form">
-            <label for="artists-input"><h2>Add New Artist</h2></label>
+            <label for="artists-input">
+                <h2>Add New Artist</h2>
+            </label>
             <input type="text" id="artist-input"><br>
 
             <!-- Button triggers new artist to be added -->
             <input id="add-artist" type="submit" value="Submit">
         </form>
         <div id="gifs-appear-here"></div>
-    
+
 
         <script type="text/javascript">
-            // Initial array of movies
+            // Initial array of artists
             var artists = ["Bruno Mars", "Taylor Swift", "Ed Sheeran", "Jason Derulo", "Charlie Puth", "BTS", "The Weeknd"];
 
             // Function for displaying artist data
             var renderButtons = () => {
 
-                // Deleting the movie buttons prior to adding new artists buttons
+                // Deleting the buttons prior to adding new artists buttons
                 // (this is necessary otherwise we will have repeat buttons)
                 document.querySelector("#buttons-view").innerHTML = "";
 
-                // Looping through the array of movies
+                // Looping through the array of artists
                 for (let artist of artists) {
 
-                    // Then dynamicaly generating buttons for each movie in the array.
+                    // Generate buttons for each artist in the array.
                     var a = document.createElement("button");
-                    // Adding a class
+                    // Adding a class to artist
                     a.classList.add("artist");
-                    // Adding a data-attribute with a value of the movie at index i
+                    // Adding attribute to artist
                     a.setAttribute("data-name", artist);
-                    // Providing the button's text with a value of the movie at index i
+                    // text will display for artists button
                     a.innerText = artist;
                     // Adding the button to the HTML
                     document.querySelector("#buttons-view").appendChild(a);
@@ -64,36 +66,27 @@
 
                 // This line will grab the text from the input box
                 var artist = document.querySelector("#artist-input").value.trim();
-                // The movie from the textbox is then added to our array
+                // The text from the textbox is then added to our array
                 artists.push(artist);
 
-                // calling renderButtons which handles the processing of our movie array
+                // calling renderButtons
                 renderButtons();
             });
-
-            // Calling the renderButtons function at least once to display the initial list of movies
+            
             renderButtons();
 
-            // function displayGifs() {
-            //     var lady = $(this).attr("data-name");
-            //     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + lady + "&api_key=dc6zaTOxFJmzC&limit=8";
-
-            //     $.ajax({
-            //         url: queryURL,
-            //         method: 'GET'
-            //     })
+            // click event to display gifs
 
             document.querySelector(".container").addEventListener("click", function (event) {
                 if (event.target.tagName === "button".toUpperCase()) {
-
-                    // In this case, the "this" keyword refers to the button that was clicked
+                
                     var person = event.target.innerText;
                     console.log(person)
 
-                    // Constructing a URL to search Giphy for the name of the person who said the quote
+                    // URL with target & my api key
                     var queryURL = `https://api.giphy.com/v1/gifs/search?q=${person}&api_key=m5A5ykcIh0d4oXBG4MK39GZTChMfxlj3&limit=10`;
                     console.log(queryURL)
-                    // Performing our AJAX GET request
+                    // Performing our GET request
                     fetch(queryURL, {
                         method: "GET"
                     })
@@ -110,7 +103,7 @@
                             // Looping over every result item
                             for (let item of results) {
 
-                                // Only taking action if the photo has an appropriate rating
+                                // Only taking action if the gif has an appropriate rating
                                 if (item.rating !== "r" && item.rating !== "pg-13") {
                                     // Creating a div for the gif
                                     var gifDiv = document.createElement("div");
@@ -146,41 +139,20 @@
                 }
             });
             renderButtons();
-
+//This on click function makes the image state come in still and will animate and still upon clicking
             document.querySelector(".container").addEventListener("click", function (event) {
-            let currentImg = event.target
-            var state = currentImg.dataset.state
-            if (state === "still") {
-                currentImg.setAttribute("src", currentImg.dataset.animate)
-                currentImg.setAttribute("data-state", "animate")
-            } else {
-                currentImg.setAttribute("src", currentImg.dataset.still)
-                currentImg.setAttribute("data-state", "still")
-            }
+                let currentImg = event.target
+                var state = currentImg.dataset.state
+                if (state === "still") {
+                    currentImg.setAttribute("src", currentImg.dataset.animate)
+                    currentImg.setAttribute("data-state", "animate")
+                } else {
+                    currentImg.setAttribute("src", currentImg.dataset.still)
+                    currentImg.setAttribute("data-state", "still")
+                }
             })
 
-            // document.querySelector(".container").addEventListener("click", function (event) {
-            //         if (event.target.tagName === 'img'.toUpperCase()) {
-            //             let currentImg = event.target
-            //             var state = currentImg.dataset.state
-            //             // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-            //             // Then, set the image's data-state to animate
-            //             // Else set src to the data-still value
-            //             if (state === "still") {
-            //                 currentImg.setAttribute("src", currentImg.dataset.animate)
-            //                 currentImg.setAttribute("data-state", "animate")
-            //             } else {
-            //                 currentImg.setAttribute('src', currentImg.dataset.still)
-            //                 currentImg.setAttribute("data-state", "still")
-            //             }
-            //         }
-            //     });
-
-
-
-
-
-    //create an array of disney characters
+   
 
     //Create a loop to make the array into buttons
     //Create on click function for button
@@ -191,8 +163,6 @@
 
     //Add form that takes value and adds into array.
     //Make function that makes array into button
-
-
 
 //Your app should take the topics in this array and create buttons in your HTML.
 
